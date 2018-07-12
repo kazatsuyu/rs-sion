@@ -146,10 +146,47 @@ impl Ord for Value {
     }
 }
 
+#[allow(unused_imports)]
+use std::f64::INFINITY;
+ #[allow(unused_imports)]
+use std::f64::NAN;
+
+#[macro_export]
+macro_rules! sion {
+    (nil) => { $crate::Nil };
+    (true) => { $crate::Bool(true) };
+    (false) => { $crate::Bool(false) };
+    (inf) => { $crate::Double($crate::INFINITY) };
+    (-inf) => { $crate::Double(-$crate::INFINITY) };
+    (nan) => { $crate::Double($crate::NAN) };
+    ([:]) => {
+        $crate::Dictionary($crate::HashMap::new())
+    };
+    ([ $($tt:tt),* ]) => {{
+        $crate::Array(vec![$($tt)*])
+    }};
+    ([ $($tt:tt):+, ]) => {$crate::Dictionary({
+        let mut dict = $crate::HashMap::<$crate::Value, $crate::Value>::new();
+        dict.insert(sion!($($tt)+), sion!($($tt)+));
+        dict
+    })};
+}
+
 #[cfg(test)]
 mod tests {
+    use Value::*;
+    use std::collections::HashMap;
+    use std::f64;
     #[test]
     fn it_works() {
-        assert_eq!(2 + 2, 4);
+        assert_eq!(sion!(nil), Nil);
+        assert_eq!(sion!(true), Bool(true));
+        assert_eq!(sion!(false), Bool(false));
+        assert_eq!(sion!(inf), Double(f64::INFINITY));
+        assert_eq!(sion!(-inf), Double(-f64::INFINITY));
+        assert_eq!(sion!(nan), Double(-f64::NAN));
+        assert_eq!(sion!([]), Array(vec![]));
+        assert_eq!(sion!([:]), Dictionary(HashMap::new()));
+        // assert_eq!(sion!([[0]:[0],]), Dictionary(HashMap::new()));
     }
 }
