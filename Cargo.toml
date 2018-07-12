@@ -1,0 +1,6 @@
+[package]
+name = "rs-sion"
+version = "0.1.0"
+authors = ["kazatsuyu <shirayama.kazatsuyu@gmail.com>"]
+
+[dependencies]
