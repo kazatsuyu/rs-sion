@@ -2,5 +2,8 @@
 name = "rs-sion"
 version = "0.1.0"
 authors = ["kazatsuyu <shirayama.kazatsuyu@gmail.com>"]
+license = "MIT"
 
 [dependencies]
+indexmap = "1.0.1"
+dtoa = "0.4.3"
